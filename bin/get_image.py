@@ -59,30 +59,25 @@ def lat_long_zoom_to_URL(x, y, zoom):
 if __name__ == "__main__":
 
     zoom = 18
-    outdir = '/home/ubuntu/DeepVGI-0.2/data/image_project_922_negative'
-    img_dir = '/home/ubuntu/DeepVGI-0.2/data/image_project_922'
-    filename = '/home/ubuntu/DeepVGI-0.2/data/all_tasks_922.csv'
+    img_dir = '/home/ubuntu/DeepVGI-0.3/data/image_guinea'
+    filename = '/home/ubuntu/DeepVGI-0.3/data/guinea.csv'
 
     with open(filename) as csvfile:
         reader = csv.DictReader(csvfile)
         listx, listy = [], []
         for row in reader:
-            if row['project_id'] == '922':
-                task_x = row['task_id'].strip().split('-')[1]
-                task_y = row['task_id'].strip().split('-')[2]
+            task_x = row['task_id'].strip().split('-')[1]
+            task_y = row['task_id'].strip().split('-')[2]
 
-                listx.append(task_x)
-                listy.append(task_y)
+            listx.append(task_x)
+            listy.append(task_y)
 
         tilelist = zip(listx, listy)
-
 
     for i in tilelist:
         image_name = str(i[0]) + '-' + str(i[1]) + '.jpeg'
         os.chdir(img_dir)
-        if not os.path.exists(image_name):
-            os.chdir(outdir)
-            URL = lat_long_zoom_to_URL(i[0], i[1], zoom)
-            urllib.urlretrieve(URL, image_name)
-            if os.path.getsize(image_name) <= 1033L:
-                os.remove(image_name)
+        URL = lat_long_zoom_to_URL(i[0], i[1], zoom)
+        urllib.urlretrieve(URL, image_name)
+        if os.path.getsize(image_name) <= 1033L:
+            os.remove(image_name)
