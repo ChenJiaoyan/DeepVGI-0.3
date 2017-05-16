@@ -36,11 +36,13 @@ def get_nodes(shpfile):
                 idall.append(node.get('id'))
                 latall.append(node.get('lat'))
                 lonall.append(node.get('lon'))
+
     return idall, latall, lonall
+
 
 if __name__ == "__main__":
 
-    shapefile = '../data/shp/select1.shp'
+    shapefile = '../data/shp/test_nodesapi.shp'
     output = '../data/guinea_positive_1.csv'
     fields = ['osm_id', 'lat', 'lon']
     csvfile = open(output, 'wb')
