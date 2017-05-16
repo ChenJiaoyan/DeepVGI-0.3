@@ -17,7 +17,7 @@ def cal_pixel(lat, lon):
 
 def get_nodes(shpfile):
     api = 'http://www.openstreetmap.org/api/0.6/way/'
-    driver = ogr.GetDriverByName(shpfile)
+    driver = ogr.GetDriverByName("ESRI Shapefile")
     source = driver.Open(shpfile, 0)
     layer = source.GetLayer()
     idall = []
