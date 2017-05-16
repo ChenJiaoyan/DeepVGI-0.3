@@ -27,14 +27,15 @@ def get_nodes(shpfile):
     for i in range(0, layer.GetFeatureCount()):
         feature = layer.GetFeature(i)
         osmid = feature.GetField("osm_id")
-        url = api + str(osmid) + '/full'
-        tree = ET.ElementTree(file = urllib2.urlopen(url))
-        root = tree.getroot()
+        if osmid != None:
+            url = api + str(osmid) + '/full'
+            tree = ET.ElementTree(file = urllib2.urlopen(url))
+            root = tree.getroot()
 
-        for node in root.findall('node'):
-            idall.append(node.get('id'))
-            latall.append(node.get('lat'))
-            lonall.append(node.get('lon'))
+            for node in root.findall('node'):
+                idall.append(node.get('id'))
+                latall.append(node.get('lat'))
+                lonall.append(node.get('lon'))
     return idall, latall, lonall
 
 if __name__ == "__main__":
