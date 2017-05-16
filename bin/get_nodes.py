@@ -43,7 +43,7 @@ def get_nodes(shpfile):
 if __name__ == "__main__":
 
     shapefile = '../data/shp/test_nodesapi.shp'
-    output = '../data/guinea_positive_1.csv'
+    output = '../data/test.csv'
     fields = ['osm_id', 'lat', 'lon']
     csvfile = open(output, 'wb')
     writer = csv.writer(csvfile)
