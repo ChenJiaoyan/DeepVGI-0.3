@@ -27,7 +27,7 @@ def get_nodes(shpfile):
     for i in range(0, layer.GetFeatureCount()):
         feature = layer.GetFeature(i)
         osmid = feature.GetField("osm_id")
-        url = api + osmid + '/full'
+        url = api + str(osmid) + '/full'
         tree = ET.ElementTree(file = urllib2.urlopen(url))
         root = tree.getroot()
 
