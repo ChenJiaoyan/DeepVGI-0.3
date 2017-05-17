@@ -29,13 +29,17 @@ def get_nodes(shpfile):
         osmid = feature.GetField("osm_id")
         if osmid != None:
             url = api + str(osmid) + '/full'
-            tree = ET.ElementTree(file = urllib2.urlopen(url))
-            root = tree.getroot()
+            req = urllib2.Request(url)
+            response = urllib2.urlopen(req)
+            code = response.getcode()
+            if code != 410:
+                tree = ET.ElementTree(file = urllib2.urlopen(url))
+                root = tree.getroot()
 
-            for node in root.findall('node'):
-                idall.append(node.get('id'))
-                latall.append(node.get('lat'))
-                lonall.append(node.get('lon'))
+                for node in root.findall('node'):
+                    idall.append(node.get('id'))
+                    latall.append(node.get('lat'))
+                    lonall.append(node.get('lon'))
 
     return idall, latall, lonall
 
