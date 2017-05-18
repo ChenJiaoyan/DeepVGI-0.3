@@ -30,9 +30,14 @@ def get_nodes(shpfile):
         if osmid != None:
             url = api + str(osmid) + '/full'
             req = urllib2.Request(url)
-            response = urllib2.urlopen(req)
-            code = response.getcode()
-            if code != 410:
+            try:
+                response = urllib2.urlopen(req)
+            except urllib2.HTTPError, e:
+                print e.code
+            else:
+            #response = urllib2.urlopen(req)
+            #code = response.getcode()
+            #if code != 410:
                 tree = ET.ElementTree(file = urllib2.urlopen(url))
                 root = tree.getroot()
 
