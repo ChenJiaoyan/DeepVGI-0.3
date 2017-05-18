@@ -35,10 +35,7 @@ def get_nodes(shpfile):
             except urllib2.HTTPError, e:
                 print e.code
             else:
-            #response = urllib2.urlopen(req)
-            #code = response.getcode()
-            #if code != 410:
-                tree = ET.ElementTree(file = urllib2.urlopen(url))
+                tree = ET.ElementTree(response)
                 root = tree.getroot()
 
                 for node in root.findall('node'):
