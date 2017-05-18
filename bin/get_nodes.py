@@ -35,9 +35,8 @@ def get_nodes(shpfile):
             except urllib2.HTTPError, e:
                 print e.code
             else:
-                tree = ET.ElementTree(response)
+                tree = ET.parse(response)
                 root = tree.getroot()
-
                 for node in root.findall('node'):
                     idall.append(node.get('id'))
                     latall.append(node.get('lat'))
@@ -48,7 +47,7 @@ def get_nodes(shpfile):
 
 if __name__ == "__main__":
 
-    shapefile = '../data/shp/select1.shp'
+    shapefile = '../data/shp/test_nodesapi.shp'
     output = '../data/select1.csv'
     fields = ['osm_id', 'lat', 'lon']
     csvfile = open(output, 'wb')
