@@ -47,9 +47,9 @@ def get_nodes(shpfile):
 
 if __name__ == "__main__":
 
-    shapefile = '../data/shp/select1.shp'
-    output = '../data/select1.csv'
-    fields = ['osm_id', 'lat', 'lon']
+    shapefile = '../data/shp/select2.shp'
+    output = '../data/select2.csv'
+    fields = ['osm_id', 'task_x', 'task_y']
     csvfile = open(output, 'wb')
     writer = csv.writer(csvfile)
     writer.writerow(fields)
