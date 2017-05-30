@@ -49,8 +49,8 @@ class MSClient:
         lines = FileIO.read_lines(osm_file, 1)
         p_imgs_raw = []
         for line in lines:
-            task_x = line['task_x']
-            task_y = line['task_y']
+            task_x = int(line['task_x'])
+            task_y = int(line['task_y'])
             p_imgs_raw.append([task_x, task_y])
         p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]  # remove duplicate
         return p_imgs
