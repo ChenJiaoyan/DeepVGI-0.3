@@ -51,7 +51,7 @@ def read_train_sample(n1, n0, train_imgs, osm_p_imgs, osm_n_imgs):
         k =  [int(task_x), int(task_y)]
         if k in osm_p_imgs:
             osm_po_imgs.append(img)
-        elif k in ms_n_imgs:
+        elif k in osm_n_imgs:
             osm_ne_imgs.append(img)
 
     print 'osm_po_imgs: %d \n' % len(osm_po_imgs)
