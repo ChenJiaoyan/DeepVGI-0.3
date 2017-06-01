@@ -26,6 +26,5 @@ for feature in layer:
     writer.writerow(row)
     i += 1
 
-driver.close()
 csvfile.close()
 
