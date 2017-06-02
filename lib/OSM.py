@@ -84,3 +84,47 @@ class MSClient:
         train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
         return train_imgs, test_imgs
 
+class GPXclient:
+    def __init__(self, project_id=5, name='Guinea'):
+        self.project_id = project_id
+        self.name = name
+
+    def read_p_images(self):
+        gpx_file = '../data/gpx_nodes.csv'
+        lines = FileIO.csv_reader(gpx_file)
+        p_imgs_raw = []
+        for line in lines:
+            task_x = line['task_x']
+            task_y = line['task_y']
+            p_imgs_raw.append([task_x, task_y])
+        p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]
+        return p_imgs
+
+    def read_n_images(self):
+        img_dir = '../data/image_guinea'
+        imgs = os.listdir(img_dir)
+        img_file = []
+        for img in imgs:
+            i1, i2 = img.index('-'), img.index('.')
+            task_x, task_y = int(img[0:i1]), int(img[(i1 + 1):i2])
+            img_file.append([int(task_x), int(task_y)])
+
+        p_imgs = self.read_p_images()
+        p_set = set(tuple(element) for element in p_imgs)
+        img_set = set(tuple(element) for element in img_file)
+        n_imgs = list(img_set - p_set)
+        return n_imgs
+
+    def imgs_cross_validation(self, cv_i, cv_n):
+        img_dir = '../data/image_guinea'
+        imgs = os.listdir(img_dir)
+        e_imgs = FileIO.read_lines("../data/test_imgs.csv", 0)  # random?
+        for e_img in e_imgs:
+            if e_img.strip() in imgs:
+                imgs.remove(e_img.strip())
+        random.shuffle(imgs)
+        l = len(imgs)
+        batch = l / cv_n
+        test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
+        train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
+        return train_imgs, test_imgs
