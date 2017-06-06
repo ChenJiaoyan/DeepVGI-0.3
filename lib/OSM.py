@@ -73,7 +73,7 @@ class MSClient:
     def imgs_cross_validation(self, cv_i, cv_n):
         img_dir = '../data/image_guinea'
         imgs = os.listdir(img_dir)
-        e_imgs = FileIO.read_lines("../data/test_imgs.csv", 0)  # random?
+        e_imgs = FileIO.read_lines("../data/test_imgs.csv", 0)
         for e_img in e_imgs:
             if e_img.strip() in imgs:
                 imgs.remove(e_img.strip())
@@ -116,15 +116,12 @@ class GPXclient:
         return n_imgs
 
     def imgs_cross_validation(self, cv_i, cv_n):
-        img_dir = '../data/image_guinea'
+        img_dir = '../data/image_guinea/'
         imgs = os.listdir(img_dir)
-        e_imgs = FileIO.read_lines("../data/test_imgs.csv", 0)  # random?
-        for e_img in e_imgs:
-            if e_img.strip() in imgs:
-                imgs.remove(e_img.strip())
         random.shuffle(imgs)
         l = len(imgs)
         batch = l / cv_n
         test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
         train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
         return train_imgs, test_imgs
+
