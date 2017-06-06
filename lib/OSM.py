@@ -73,10 +73,6 @@ class MSClient:
     def imgs_cross_validation(self, cv_i, cv_n):
         img_dir = '../data/image_guinea'
         imgs = os.listdir(img_dir)
-        e_imgs = FileIO.read_lines("../data/test_imgs.csv", 0)
-        for e_img in e_imgs:
-            if e_img.strip() in imgs:
-                imgs.remove(e_img.strip())
         random.shuffle(imgs)
         l = len(imgs)
         batch = l / cv_n
