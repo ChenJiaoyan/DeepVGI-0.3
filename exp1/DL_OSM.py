@@ -126,7 +126,7 @@ if __name__ == '__main__':
     m = NN_Model.Model(img_X, Y, nn + '_ZY')
 
     if not evaluate_only:
-        print '--------------- Training on MS Labels---------------'
+        print '--------------- Training on OSM Labels---------------'
         m.set_batch_size(tr_b)
         m.set_epoch_num(tr_e)
         m.set_thread_num(tr_t)
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     del img_X, Y, train_imgs
     gc.collect()
 
-    print '--------------- Evaluation on MapSwipe Samples ---------------'
+    print '--------------- Evaluation on OSM Samples ---------------'
     osm_p_imgs = client.read_p_images()
     osm_n_imgs = client.read_n_images()
     img_X2, Y2 = read_test_sample(te_n, test_imgs, osm_p_imgs, osm_n_imgs)
