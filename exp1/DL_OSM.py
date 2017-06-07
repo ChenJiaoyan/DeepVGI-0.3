@@ -44,6 +44,9 @@ def read_train_sample(n1, n0, train_imgs, osm_p_imgs, osm_n_imgs):
     label = np.zeros((n1 + n0, 2))
     img_dir = '../data/image_guinea/'
 
+    print len(train_imgs)
+    print train_imgs[0:2]
+
     osm_po_imgs, osm_ne_imgs = [], []
     for img in train_imgs:
         i1, i2 = img.index('-'), img.index('.')
