@@ -44,9 +44,6 @@ def read_train_sample(n1, n0, train_imgs, osm_p_imgs, osm_n_imgs):
     label = np.zeros((n1 + n0, 2))
     img_dir = '../data/image_guinea/'
 
-    print len(train_imgs)
-    print train_imgs[0:2]
-
     osm_po_imgs, osm_ne_imgs = [], []
     for img in train_imgs:
         i1, i2 = img.index('-'), img.index('.')
@@ -122,6 +119,8 @@ if __name__ == '__main__':
     train_imgs, test_imgs = client.imgs_cross_validation(cv_i, cv_n)
     osm_p_imgs = client.read_p_images()
     osm_n_imgs = client.read_n_images()
+    print osm_p_imgs[0:10]
+    print osm_n_imgs[0:10]
     print 'train_imgs: %d \n' % len(train_imgs)
     print 'osm_p_imgs: %d \n' % len(osm_p_imgs)
     print 'osm_n_imgs: %d\n' % len(osm_n_imgs)
