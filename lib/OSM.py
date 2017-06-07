@@ -61,7 +61,7 @@ class MSClient:
         img_file = []
         for img in imgs:
             i1, i2 = img.index('-'), img.index('.')
-            task_x, task_y = int(img[0:i1]), int(img[(i1 + 1):i2])
+            task_x, task_y = img[0:i1], img[(i1 + 1):i2]
             img_file.append([int(task_x), int(task_y)])
 
         p_imgs = self.read_p_images()
