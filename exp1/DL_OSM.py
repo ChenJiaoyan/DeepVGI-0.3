@@ -119,8 +119,6 @@ if __name__ == '__main__':
     train_imgs, test_imgs = client.imgs_cross_validation(cv_i, cv_n)
     osm_p_imgs = client.read_p_images()
     osm_n_imgs = client.read_n_images()
-    print osm_p_imgs[0:10]
-    print osm_n_imgs[0:10]
     print 'train_imgs: %d \n' % len(train_imgs)
     print 'osm_p_imgs: %d \n' % len(osm_p_imgs)
     print 'osm_n_imgs: %d\n' % len(osm_n_imgs)
