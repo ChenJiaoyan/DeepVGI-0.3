@@ -109,7 +109,8 @@ class GPXclient:
         p_imgs = self.read_p_images()
         p_set = set(tuple(element) for element in p_imgs)
         img_set = set(tuple(element) for element in img_file)
-        n_imgs = list(img_set - p_set)
+        n_imgs_tuple = list(img_set - p_set)
+        n_imgs = list(list(element) for element in n_imgs_tuple)
         return n_imgs
 
     def imgs_cross_validation(self, cv_i, cv_n):
@@ -121,3 +122,27 @@ class GPXclient:
         test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
         train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
         return train_imgs, test_imgs
+
+class OSM_GPXclient:
+    def __init__(self, project_id=5, name='Guinea'):
+        self.project_id = project_id
+        self.name = name
+
+    def read_pn_images(self):
+        osm = MSClient()
+        gpx = GPXclient()
+        p_imgs = osm.read_p_images() + gpx.read_p_images()
+        n_imgs = osm.read_n_images() + gpx.read_n_images()
+        return p_imgs, n_imgs
+
+    def imgs_cross_validation(self, cv_i, cv_n):
+        img_dir = '../data/image_guinea/'
+        imgs = os.listdir(img_dir)
+        random.shuffle(imgs)
+        l = len(imgs)
+        batch = l / cv_n
+        test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
+        train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
+        return train_imgs, test_imgs
+
+
