@@ -10,7 +10,6 @@ from scipy import misc
 
 sys.path.append("../lib")
 import NN_Model
-import FileIO
 import OSM
 
 def read_test_sample(n, test_imgs, p_imgs, n_imgs):
