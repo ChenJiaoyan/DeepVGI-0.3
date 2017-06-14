@@ -45,7 +45,7 @@ class MSClient:
         self.name = name
 
     def read_p_images(self):
-        osm_file = '../data/guinea_positive.csv'
+        osm_file = '../data/guinea_highway.csv'
         lines = FileIO.csv_reader(osm_file)
         p_imgs_raw = []
         for line in lines:
