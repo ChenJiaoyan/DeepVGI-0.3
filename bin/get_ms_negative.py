@@ -8,15 +8,15 @@ import csv
 sys.path.append("../lib")
 import FileIO
 
-ms_file = '../data/guinea.csv'
+ms_file = '../data/guinea_ms.csv'
 lines = FileIO.csv_reader(ms_file)
 ms_imgs = []
 for line in lines:
-    item = line['task_id'].strip().split('-')
-    task_x = item[1]
-    task_y = item[2]
-    ms_imgs.append([int(task_x), int(task_y)])
-
+    if int(line['bad_image']) == 0:
+        task_x = line['task_x']
+        task_y = line['task_y']
+        ms_imgs.append([int(task_x), int(task_y)])
+print len(ms_imgs)
 img_dir = '../data/image_guinea/'
 imgs = os.listdir(img_dir)
 img_file = []
