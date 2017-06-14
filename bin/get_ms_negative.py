@@ -8,11 +8,11 @@ import csv
 sys.path.append("../lib")
 import FileIO
 
-ms_file = '../data/guinea_ms.csv'
+ms_file = '../data/sub_guinea_ms.csv'
 lines = FileIO.csv_reader(ms_file)
 ms_imgs = []
 for line in lines:
-    if int(line['bad_image']) == 0:
+    if line['bad_image'] == '0':
         task_x = line['task_x']
         task_y = line['task_y']
         ms_imgs.append([int(task_x), int(task_y)])
