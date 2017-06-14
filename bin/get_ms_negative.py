@@ -8,7 +8,7 @@ import csv
 sys.path.append("../lib")
 import FileIO
 
-ms_file = '../data/sub_guinea_ms.csv'
+ms_file = '../data/guinea_ms.csv'
 lines = FileIO.csv_reader(ms_file)
 ms_imgs = []
 for line in lines:
