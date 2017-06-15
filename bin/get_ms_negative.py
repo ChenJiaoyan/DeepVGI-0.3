@@ -1,5 +1,5 @@
 #! /usr/bin/python
-# get ms images without labels == negative images
+# get ms images without labels and bad image == negative images
 
 import os
 import sys
