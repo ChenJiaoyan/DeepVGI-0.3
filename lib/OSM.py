@@ -62,7 +62,7 @@ class MSClient:
         for line in lines:
             task_x = line['task_x']
             task_y = line['task_y']
-            n_imgs.append([task_x, task_y])
+            n_imgs.append([int(task_x), int(task_y)])
         return n_imgs
 
     def imgs_cross_validation(self, cv_i, cv_n):
@@ -138,5 +138,4 @@ class OSM_GPXclient:
         test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
         train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
         return train_imgs, test_imgs
-
 
