@@ -92,19 +92,13 @@ class GPXclient:
         return p_imgs
 
     def read_n_images(self):
-        img_dir = '../data/image_guinea'
-        imgs = os.listdir(img_dir)
-        img_file = []
-        for img in imgs:
-            i1, i2 = img.index('-'), img.index('.')
-            task_x, task_y = int(img[0:i1]), int(img[(i1 + 1):i2])
-            img_file.append([int(task_x), int(task_y)])
-
-        p_imgs = self.read_p_images()
-        p_set = set(tuple(element) for element in p_imgs)
-        img_set = set(tuple(element) for element in img_file)
-        n_imgs_tuple = list(img_set - p_set)
-        n_imgs = list(list(element) for element in n_imgs_tuple)
+        nega_file = '../data/ms_negative.csv'
+        lines = FileIO.csv_reader(nega_file)
+        n_imgs = []
+        for line in lines:
+            task_x = line['task_x']
+            task_y = line['task_y']
+            n_imgs.append([int(task_x), int(task_y)])
         return n_imgs
 
     def imgs_cross_validation(self, cv_i, cv_n):
