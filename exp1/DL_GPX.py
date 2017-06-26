@@ -1,5 +1,5 @@
 #! /usr/bin/python
-
+# same read sample as osm
 import sys
 import gc
 import DL_OSM
