@@ -87,7 +87,7 @@ class GPXclient:
         for line in lines:
             task_x = line['task_x']
             task_y = line['task_y']
-            p_imgs_raw.append([task_x, task_y])
+            p_imgs_raw.append([int(task_x), int(task_y)])
         p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]
         return p_imgs
 
