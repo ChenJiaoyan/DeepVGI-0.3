@@ -134,3 +134,29 @@ class OSM_GPXclient:
         train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
         return train_imgs, test_imgs
 
+class OSM_GPX_intClient:
+    def __init__(self, project_id=5, name='Guinea'):
+        self.project_id = project_id
+        self.name = name
+
+    def read_pn_images(self):
+        osm = MSClient()
+        gpx = GPXclient()
+        p_osm_imgs = osm.read_p_images()
+        p_gpx_imgs = gpx.read_p_images()
+        p_imgs = list(set(p_osm_imgs).intersection(set(p_gpx_imgs)))
+        n_imgs_raw = osm.read_n_images()
+        n_imgs = list(set(n_imgs_raw).difference(set(p_imgs)))
+        return p_imgs, n_imgs
+
+    def imgs_cross_validation(self, cv_i, cv_n):
+        img_dir = '../data/image_guinea/'
+        imgs = os.listdir(img_dir)
+        random.shuffle(imgs)
+        l = len(imgs)
+        batch = l / cv_n
+        test_imgs = imgs[cv_i * batch: (cv_i + 1) * batch]
+        train_imgs = imgs[0:cv_i * batch] + imgs[(cv_i + 1) * batch: l]
+        return train_imgs, test_imgs
+
+
