@@ -53,8 +53,8 @@ def read_train_sample(n1, n0, train_imgs, p_imgs, n_imgs):
         elif k in n_imgs:
             ne_imgs.append(img)
 
-    print 'osm_po_imgs: %d \n' % len(po_imgs)
-    print 'osm_ne_imgs: %d \n' % len(ne_imgs)
+    print 'po_imgs: %d \n' % len(po_imgs)
+    print 'ne_imgs: %d \n' % len(ne_imgs)
 
     po_imgs = random.sample(po_imgs, n1)
     for i, img in enumerate(po_imgs):
@@ -114,13 +114,13 @@ if __name__ == '__main__':
     cv_n = 4
 
     print '--------------- Read Samples ---------------'
-    client = OSM.OSM_GPXclient()
+    client = OSM.OSM_GPX_intClient()
     train_imgs, test_imgs = client.imgs_cross_validation(cv_i, cv_n)
     p_imgs, n_imgs = client.read_pn_images()
 
     print 'train_imgs: %d \n' % len(train_imgs)
-    print 'osm_p_imgs: %d \n' % len(p_imgs)
-    print 'osm_n_imgs: %d\n' % len(n_imgs)
+    print 'p_imgs: %d \n' % len(p_imgs)
+    print 'n_imgs: %d\n' % len(n_imgs)
     img_X, Y = read_train_sample(tr_n1, tr_n0, train_imgs, p_imgs, n_imgs)
     m = NN_Model.Model(img_X, Y, nn + '_ZY')
 
