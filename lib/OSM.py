@@ -142,11 +142,12 @@ class OSM_GPX_intClient:
     def read_pn_images(self):
         osm = MSClient()
         gpx = GPXclient()
-        p_osm_imgs = osm.read_p_images()
-        p_gpx_imgs = gpx.read_p_images()
+        p_osm_imgs = map(tuple, osm.read_p_images())
+        p_gpx_imgs = map(tuple, gpx.read_p_images())
         p_imgs = list(set(p_osm_imgs).intersection(set(p_gpx_imgs)))
-        n_imgs_raw = osm.read_n_images()
-        n_imgs = list(set(n_imgs_raw).difference(set(p_imgs)))
+        n_imgs_raw = map(tuple, osm.read_n_images())
+        p_imgs_t = map(tuple, p_imgs)
+        n_imgs = list(set(n_imgs_raw).difference(set(p_imgs_t)))
         return p_imgs, n_imgs
 
     def imgs_cross_validation(self, cv_i, cv_n):
