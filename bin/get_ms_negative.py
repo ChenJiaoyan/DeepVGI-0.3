@@ -12,8 +12,8 @@ ms_file = '../data/guinea_ms.csv'
 lines = FileIO.csv_reader(ms_file)
 ms_imgs = []
 for line in lines:
-    task_x = line['task_x']
-    task_y = line['task_y']
+    task_x = line['task_x'].strip()
+    task_y = line['task_y'].strip()
     ms_imgs.append([int(task_x), int(task_y)])
 print len(ms_imgs)
 
