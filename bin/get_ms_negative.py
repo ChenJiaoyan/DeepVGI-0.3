@@ -12,9 +12,10 @@ ms_file = '../data/guinea_ms.csv'
 lines = FileIO.csv_reader(ms_file)
 ms_imgs = []
 for line in lines:
-    task_x = line['task_x']
-    task_y = line['task_y']
-    ms_imgs.append([int(task_x), int(task_y)])
+    if line.strip():
+        task_x = line['task_x']
+        task_y = line['task_y']
+        ms_imgs.append([int(task_x), int(task_y)])
 print len(ms_imgs)
 
 img_dir = '../data/image_guinea/'
