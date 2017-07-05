@@ -31,10 +31,10 @@ class OSMclient:
         p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]
         return p_imgs
 
-    def MS_train_positive(self):
+    def OSM_train_positive(self):
         record = os.listdir(os.path.join(self.sample_dir, 'train/MS_record'))
         return list(set(record).intersection(set(self.OSM_positive())))
 
-    def MS_valid_positive(self):
+    def OSM_valid_positive(self):
         record = os.listdir(os.path.join(self.sample_dir, 'valid/MS_record'))
         return list(set(record).intersection(set(self.OSM_positive())))
