@@ -11,60 +11,37 @@ from scipy import misc
 sys.path.append("../lib")
 import NN_Model
 import FileIO
-import OSM
+import sample_client
 
-def read_test_sample(n, test_imgs, osm_p_imgs, osm_n_imgs):
-    img_X = np.zeros((n, 256, 256, 3))
-    label = np.zeros((n, 2))
-    img_dir = '../data/image_guinea/'
-    random.shuffle(test_imgs)
-    i = 0
-    te_p, te_n = 0, 0
-    for img in test_imgs:
-        if i >= n:
-            break
-        if os.path.exists(os.path.join(img_dir, img)):
-            img_X[i] = misc.imread(os.path.join(img_dir, img))
-        i1, i2 = img.index('-'), img.index('.')
-        task_x, task_y = img[0:i1], img[(i1 + 1):i2]
-        if [int(task_x), int(task_y)] in osm_p_imgs:
-            label[i, 1] = 1
-            i += 1
-            te_p += 1
-        elif [int(task_x), int(task_y)] in osm_n_imgs:
-            label[i, 0] = 1
-            i += 1
-            te_n += 1
-    print 'positive testing samples: %d \n ' % te_p
-    print 'negative testing samples: %d \n ' % te_n
-    return img_X, label
+sample_dir = '../samples0/'
 
-def read_train_sample(n1, n0, train_imgs, osm_p_imgs, osm_n_imgs):
+def read_train_sample(n1, n0):
+    client = sample_client.OSMclient()
+    OSM_train_p = client.OSM_train_positive()
+    OSM_train_n = client.MS_train_negative()
+
+    print 'OSM_train_p: %d \n' % len(OSM_train_p)
+    print 'OSM_train_n: %d \n' % len(OSM_train_n)
+
+    if len(OSM_train_p) < n1:
+        print 'n1 is set too large'
+        sys.exit()
+
+    if len(OSM_train_n) < n0:
+        print 'n0 is set too large'
+        sys.exit()
+
     img_X1, img_X0 = np.zeros((n1, 256, 256, 3)), np.zeros((n0, 256, 256, 3))
     label = np.zeros((n1 + n0, 2))
-    img_dir = '../data/image_guinea/'
 
-    osm_po_imgs, osm_ne_imgs = [], []
-    for img in train_imgs:
-        i1, i2 = img.index('-'), img.index('.')
-        task_x, task_y = img[0:i1], img[(i1 + 1):i2]
-        k =  [int(task_x), int(task_y)]
-        if k in osm_p_imgs:
-            osm_po_imgs.append(img)
-        elif k in osm_n_imgs:
-            osm_ne_imgs.append(img)
-
-    print 'osm_po_imgs: %d \n' % len(osm_po_imgs)
-    print 'osm_ne_imgs: %d \n' % len(osm_ne_imgs)
-
-    osm_po_imgs = random.sample(osm_po_imgs, n1)
-    for i, img in enumerate(osm_po_imgs):
-        img_X1[i] = misc.imread(os.path.join(img_dir, img))
+    OSM_train_p = random.sample(OSM_train_p, n1)
+    for i, img in enumerate(OSM_train_p):
+        img_X1[i] = misc.imread(os.path.join(sample_dir, img))
     label[0:n1, 1] = 1
 
-    osm_ne_imgs = random.sample(osm_ne_imgs, n0)
-    for i, img in enumerate(osm_ne_imgs):
-        img_X0[i] = misc.imread(os.path.join(img_dir, img))
+    OSM_train_n = random.sample(OSM_train_n, n0)
+    for i, img in enumerate(OSM_train_n):
+        img_X0[i] = misc.imread(os.path.join(sample_dir, img))
     label[n1:(n1 + n0), 0] = 1
 
     j = range(n1 + n0)
@@ -115,14 +92,7 @@ if __name__ == '__main__':
     cv_n = 4
 
     print '--------------- Read Samples ---------------'
-    client = OSM.MSClient()
-    train_imgs, test_imgs = client.imgs_cross_validation(cv_i, cv_n)
-    osm_p_imgs = client.read_p_images()
-    osm_n_imgs = client.read_n_images()
-    print 'train_imgs: %d \n' % len(train_imgs)
-    print 'osm_p_imgs: %d \n' % len(osm_p_imgs)
-    print 'osm_n_imgs: %d\n' % len(osm_n_imgs)
-    img_X, Y = read_train_sample(tr_n1, tr_n0, train_imgs, osm_p_imgs, osm_n_imgs)
+    img_X, Y = read_train_sample(tr_n1, tr_n0)
     m = NN_Model.Model(img_X, Y, nn + '_ZY')
 
     if not evaluate_only:
@@ -133,14 +103,14 @@ if __name__ == '__main__':
         m.train(nn)
         print '--------------- Evaluation on Training Samples ---------------'
         m.evaluate()
-    del img_X, Y, train_imgs
+    del img_X, Y
     gc.collect()
 
-    print '--------------- Evaluation on OSM Samples ---------------'
-    osm_p_imgs = client.read_p_images()
-    osm_n_imgs = client.read_n_images()
-    img_X2, Y2 = read_test_sample(te_n, test_imgs, osm_p_imgs, osm_n_imgs)
+    print '--------------- Evaluation on Validation Samples ---------------'
+    img_X2, Y2 = FileIO.read_valid_sample(te_n)
     m.set_evaluation_input(img_X2, Y2)
     m.evaluate()
+    del img_X2, Y2
+    gc.collect()
 
 
