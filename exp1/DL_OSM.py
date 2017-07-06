@@ -36,12 +36,12 @@ def read_train_sample(n1, n0):
 
     OSM_train_p = random.sample(OSM_train_p, n1)
     for i, img in enumerate(OSM_train_p):
-        img_X1[i] = misc.imread(os.path.join(sample_dir, img))
+        img_X1[i] = misc.imread(os.path.join(sample_dir, 'train/MS_record/', img))
     label[0:n1, 1] = 1
 
     OSM_train_n = random.sample(OSM_train_n, n0)
     for i, img in enumerate(OSM_train_n):
-        img_X0[i] = misc.imread(os.path.join(sample_dir, img))
+        img_X0[i] = misc.imread(os.path.join(sample_dir, 'train/MS_negative/', img))
     label[n1:(n1 + n0), 0] = 1
 
     j = range(n1 + n0)
