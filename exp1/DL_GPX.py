@@ -1,41 +1,76 @@
 #! /usr/bin/python
-# same read sample as osm
+
+import os
 import sys
 import gc
 import DL_OSM
+import random
+import numpy as np
+from scipy import misc
 
 sys.path.append("../lib")
 import NN_Model
-import OSM
+import sample_client
+import FileIO
 
-evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, cv_i, te_n, nn = DL_OSM.deal_args(sys.argv[1:])
-cv_n = 4
+sample_dir = '../samples0/'
 
-print '--------------- Read Samples ---------------'
-client = OSM.GPXclient()
-train_imgs, test_imgs = client.imgs_cross_validation(cv_i, cv_n)
-gpx_p_imgs = client.read_p_images()
-gpx_n_imgs = client.read_n_images()
-print 'train_imgs: %d \n' % len(train_imgs)
-print 'gpx_p_imgs: %d \n' % len(gpx_p_imgs)
-print 'gpx_n_imgs: %d\n' % len(gpx_n_imgs)
-img_X, Y = DL_OSM.read_train_sample(tr_n1, tr_n0, train_imgs, gpx_p_imgs, gpx_n_imgs)
-m = NN_Model.Model(img_X, Y, nn + '_ZY')
+def read_train_sample(n1, n0):
+    client = sample_client.GPXclient()
+    GPX_train_p = client.GPX_train_positive()
+    GPX_train_n = client.MS_train_negative()
 
-if not evaluate_only:
-    print '--------------- Training on GPX Labels---------------'
-    m.set_batch_size(tr_b)
-    m.set_epoch_num(tr_e)
-    m.set_thread_num(tr_t)
-    m.train(nn)
-    print '--------------- Evaluation on Training Samples ---------------'
+    print 'GPX_train_p: %d \n' % len(GPX_train_p)
+    print 'GPX_train_n: %d \n' % len(GPX_train_n)
+
+    if len(GPX_train_p) < n1:
+        print 'n1 is set too large'
+        sys.exit()
+
+    if len(GPX_train_n) < n0:
+        print 'n0 is set too large'
+        sys.exit()
+
+    img_X1, img_X0 = np.zeros((n1, 256, 256, 3)), np.zeros((n0, 256, 256, 3))
+    label = np.zeros((n1 + n0, 2))
+
+    GPX_train_p = random.sample(GPX_train_p, n1)
+    for i, img in enumerate(GPX_train_p):
+        img_X1[i] = misc.imread(os.path.join(sample_dir, 'train/MS_record/', img))
+    label[0:n1, 1] = 1
+
+    GPX_train_n = random.sample(GPX_train_n, n0)
+    for i, img in enumerate(GPX_train_n):
+        img_X0[i] = misc.imread(os.path.join(sample_dir, 'train/MS_negative/', img))
+    label[n1:(n1 + n0), 0] = 1
+
+    j = range(n1 + n0)
+    random.shuffle(j)
+    X = np.concatenate((img_X1, img_X0))
+    return X[j], label[j]
+
+
+if __name__ == '__main__':
+
+    evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, cv_i, te_n, nn = DL_OSM.deal_args(sys.argv[1:])
+    print '--------------- Read Samples ---------------'
+    img_X, Y = read_train_sample(tr_n1, tr_n0)
+    m = NN_Model.Model(img_X, Y, nn + '_ZY')
+
+    if not evaluate_only:
+        print '--------------- Training on GPX Labels---------------'
+        m.set_batch_size(tr_b)
+        m.set_epoch_num(tr_e)
+        m.set_thread_num(tr_t)
+        m.train(nn)
+        print '--------------- Evaluation on Training Samples ---------------'
+        m.evaluate()
+    del img_X, Y
+    gc.collect()
+
+    print '--------------- Evaluation on Validation Samples ---------------'
+    img_X2, Y2 = FileIO.read_gpx_valid_sample(te_n)
+    m.set_evaluation_input(img_X2, Y2)
     m.evaluate()
-del img_X, Y, train_imgs
-gc.collect()
-
-print '--------------- Evaluation on GPX Samples ---------------'
-gpx_p_imgs = client.read_p_images()
-gpx_n_imgs = client.read_n_images()
-img_X2, Y2 = DL_OSM.read_test_sample(te_n, test_imgs, gpx_p_imgs, gpx_n_imgs)
-m.set_evaluation_input(img_X2, Y2)
-m.evaluate()
+    del img_X2, Y2
+    gc.collect()
