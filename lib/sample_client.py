@@ -28,7 +28,7 @@ class OSMclient:
             task_y = line['task_y']
             img = '%s-%s.jpeg' % (task_x, task_y)
             p_imgs_raw.append(img)
-        p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]
+        p_imgs = list(set(p_imgs_raw))
         return p_imgs
 
     def OSM_train_positive(self):
@@ -64,7 +64,7 @@ class GPXclient:
             task_y = line['task_y']
             img = '%s-%s.jpeg' % (task_x, task_y)
             p_imgs_raw.append(img)
-        p_imgs = [list(t) for t in set(tuple(element) for element in p_imgs_raw)]
+        p_imgs = list(set(p_imgs_raw))
         return p_imgs
 
     def GPX_train_positive(self):
@@ -89,9 +89,9 @@ class OSM_GPXclient:
         osm = OSMclient()
         gpx = GPXclient()
         train_raw = osm.OSM_train_positive() + gpx.GPX_train_positive()
-        train_positive = [list(t) for t in set(tuple(element) for element in train_raw)]
+        train_positive = list(set(train_raw))
         valid_raw = osm.OSM_valid_positive() + gpx.GPX_valid_positive()
-        valid_positive = [list(t) for t in set(tuple(element) for element in valid_raw)]
+        valid_positive = list(set(valid_raw))
         return train_positive, valid_positive
 
 class OSM_GPX_intClient:
