@@ -116,14 +116,25 @@ class OSM_GPX_intClient:
         valid_positive = list(set(osm_valid_p).intersection(set(gpx_valid_p)))
         return train_positive, valid_positive
 
-class gRoadclient():
+class gRoadclient():     # only valid images
     def __init__(self):
         self.sample_dir = '../samples0/'
 
-    def MS_valid_record(self):
-        return os.listdir(os.path.join(self.sample_dir, 'valid/MS_record'))
-
-    def MS_valid_negative(self):
+    def valid_negative(self):
         return os.listdir(os.path.join(self.sample_dir, 'valid/MS_negative'))
 
     def gRoad_positive(self):
+        road_file = '../data/gRoads_nodes.csv'
+        lines = FileIO.csv_reader(road_file)
+        p_imgs_raw = []
+        for line in lines:
+            task_x = line['task_x']
+            task_y = line['task_y']
+            img = '%s-%s.jpeg' % (task_x, task_y)
+            p_imgs_raw.append(img)
+        p_imgs = list(set(p_imgs_raw))
+        return p_imgs
+
+    def valid_positive(self):
+        record = os.listdir(os.path.join(self.sample_dir, 'valid/MS_record'))
+        return list(set(record).intersection(set(self.gRoad_positive())))
