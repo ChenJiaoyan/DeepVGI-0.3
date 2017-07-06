@@ -115,3 +115,15 @@ class OSM_GPX_intClient:
         gpx_valid_p = gpx.GPX_valid_positive()
         valid_positive = list(set(osm_valid_p).intersection(set(gpx_valid_p)))
         return train_positive, valid_positive
+
+class gRoadclient():
+    def __init__(self):
+        self.sample_dir = '../samples0/'
+
+    def MS_valid_record(self):
+        return os.listdir(os.path.join(self.sample_dir, 'valid/MS_record'))
+
+    def MS_valid_negative(self):
+        return os.listdir(os.path.join(self.sample_dir, 'valid/MS_negative'))
+
+    def gRoad_positive(self):

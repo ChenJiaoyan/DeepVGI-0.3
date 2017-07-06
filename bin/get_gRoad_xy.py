@@ -4,10 +4,10 @@ import get_nodes
 import csv
 from osgeo import ogr
 
-shpfile = '../data/shp/guinea_tracknodes.shp'
-output = '../data/gpx_nodes.csv'
+shpfile = '../data/shp/gRoad_guinea.shp'
+output = '../data/gRoads_nodes.csv'
 
-fields = ['GPX_id', 'task_x', 'task_y']
+fields = ['id', 'task_x', 'task_y']
 csvfile = open(output, 'wb')
 writer = csv.writer(csvfile)
 writer.writerow(fields)
@@ -15,15 +15,19 @@ writer.writerow(fields)
 driver = ogr.GetDriverByName("ESRI Shapefile")
 source = driver.Open(shpfile, 0)
 layer = source.GetLayer()
-i = 0
+
+all_nodes = []
 for feature in layer:
     geometry = feature.GetGeometryRef()
     lon = geometry.GetX()
     lat = geometry.GetY()
     task_x, task_y = get_nodes.cal_pixel(lat, lon)
-    row = [i, task_x, task_y]
+    row = '%s, %s' % (task_x, task_y)
+    all_nodes.append(row)
+all_xy = list(set(all_nodes))
+
+for i, node in enumerate(all_xy):
+    row = '%d, %s' % (i, node)
     writer.writerow(row)
-    i += 1
 
 csvfile.close()
-
