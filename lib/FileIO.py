@@ -4,7 +4,8 @@ import csv
 import os
 from scipy import misc
 import numpy as np
-
+import sample_client
+import random
 
 def csv_reader(file_name):
     cf = open(file_name)
@@ -82,13 +83,31 @@ def read_external_test_sample():
     print 'negative external testing samples: %d \n' % n_n
     return img_X[0:i], label[0:i], img_files
 
+def read_valid_sample(n):
+    client = sample_client.OSMclient()
+    MS_valid_p = client.OSM_valid_positive()
+    MS_valid_n = client.MS_valid_negative()
 
-def osm_building_weight():
-    task_w = {}
-    osm_buildings = FileIO.csv_reader("../data/buildings.csv")
-    for row in osm_buildings:
-        task_x = row['task_x']
-        task_y = row['task_y']
-        k = '%s-%s' % (task_x, task_y)
-        task_w[k] = 1
-    return task_w
+    print 'MS_valid_p: %d \n' % len(MS_valid_p)
+    print 'MS_valid_n: %d \n' % len(MS_valid_n)
+
+    if len(MS_valid_p) < n/2 or len(MS_valid_p) < n/2:
+        print 'n is set too large; use all the samples for testing'
+        n = len(MS_valid_p) * 2
+
+    img_X1, img_X0 = np.zeros((n/2, 256, 256, 3)), np.zeros((n/2, 256, 256, 3))
+    MS_valid_p = random.sample(MS_valid_p, n/2)
+    for i, img in enumerate(MS_valid_p):
+        img_X1[i] = misc.imread(os.path.join('../samples0/valid/MS_record/', img))
+
+    MS_valid_n = random.sample(MS_valid_n, n/2)
+    for i, img in enumerate(MS_valid_n):
+        img_X0[i] = misc.imread(os.path.join('../samples0/valid/MS_negative/', img))
+
+    X = np.concatenate((img_X1[0:n/2], img_X0[0:n/2]))
+
+    label = np.zeros((n, 2))
+    label[0:n/2, 1] = 1
+    label[n/2:n, 0] = 1
+
+    return X, label
