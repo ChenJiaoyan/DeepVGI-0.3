@@ -89,7 +89,6 @@ def deal_args(my_argv):
 
 if __name__ == '__main__':
     evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, cv_i, te_n, nn = deal_args(sys.argv[1:])
-    cv_n = 4
 
     print '--------------- Read Samples ---------------'
     img_X, Y = read_train_sample(tr_n1, tr_n0)
