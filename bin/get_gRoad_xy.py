@@ -22,17 +22,12 @@ for feature in layer:
     lon = geometry.GetX()
     lat = geometry.GetY()
     task_x, task_y = get_nodes.cal_pixel(lat, lon)
-    row = '%s, %s' % (task_x, task_y)
+    row = '%d, %d' % (task_x, task_y)
     all_nodes.append(row)
 all_xy = list(set(all_nodes))
 
-# for i, node in enumerate(all_xy):
-#     row = str(i) + ',' + node + '\n'
-#     writer.writerow(row)
-i = 0
-for node in all_xy:
-    row = '%s, %s' % (str(i), node)
-    i += 1
+for i, node in enumerate(all_xy):
+    row = str(i) + ',' + node + '\n'
     writer.writerow(row)
 
 csvfile.close()
