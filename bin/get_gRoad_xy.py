@@ -25,9 +25,9 @@ for feature in layer:
     row = '%d, %d' % (task_x, task_y)
     all_nodes.append(row)
 all_xy = list(set(all_nodes))
-print all_xy[0:6]
+
 for i, node in enumerate(all_xy):
-    row = str(i) + ', ' + node + '\n'
+    row = [i, node]
     print row
     writer.writerow(row)
 
