@@ -131,7 +131,7 @@ def read_gpx_valid_sample(n):
 
     return X, label
 
-def read_gRoad_valid_sample():
+def read_gRoad_valid_sample(n):
     client = sample_client.gRoadclient()
     gRoad_valid_p = client.valid_positive()
     gRoad_valid_n = client.valid_negative()
