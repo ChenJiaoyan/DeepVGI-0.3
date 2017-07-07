@@ -95,7 +95,7 @@ if __name__ == '__main__':
     m = NN_Model.Model(img_X, Y, nn + '_ZY')
 
     if not evaluate_only:
-        print '--------------- Training on OSM Labels---------------'
+        print '--------------- Training on OSM&GPX Labels---------------'
         m.set_batch_size(tr_b)
         m.set_epoch_num(tr_e)
         m.set_thread_num(tr_t)
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     gc.collect()
 
     print '--------------- Evaluation on Validation Samples ---------------'
-    img_X2, Y2 = FileIO.read_gpx_valid_sample(te_n)
+    img_X2, Y2 = FileIO.read_gpx_valid_sample(te_n) # experiment with osm, gpx, intersection and global roads samples
     m.set_evaluation_input(img_X2, Y2)
     m.evaluate()
     del img_X2, Y2
