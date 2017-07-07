@@ -25,10 +25,9 @@ for feature in layer:
     row = '%s, %s' % (task_x, task_y)
     all_nodes.append(row)
 all_xy = list(set(all_nodes))
-print all_xy[0:5]
 
 for i, node in enumerate(all_xy):
-    row = '%d, %s' % (i, node)
+    row = i + ',' + node + '/n'
     writer.writerow(row)
 
 csvfile.close()
