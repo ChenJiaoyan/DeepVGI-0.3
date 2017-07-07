@@ -22,7 +22,7 @@ for feature in layer:
     lon = geometry.GetX()
     lat = geometry.GetY()
     task_x, task_y = get_nodes.cal_pixel(lat, lon)
-    row = '%s,%s' % (task_x, task_y)
+    row = str(task_x) + ',' + str(task_y)
     all_nodes.append(row)
 all_xy = list(set(all_nodes))
 
