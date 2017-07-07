@@ -81,9 +81,9 @@ def read_valid_sample(n):   # valid positive according to osm positive
     print 'MS_valid_p: %d \n' % len(MS_valid_p)
     print 'MS_valid_n: %d \n' % len(MS_valid_n)
 
-    if len(MS_valid_p) < n/2 or len(MS_valid_p) < n/2:
+    if len(MS_valid_p) < n / 2 or len(MS_valid_n) < n / 2:
         print 'n is set too large; use all the samples for testing'
-        n = len(MS_valid_p) * 2
+        n = len(MS_valid_p) * 2 if len(MS_valid_p) < len(MS_valid_n) else len(MS_valid_n) * 2
 
     img_X1, img_X0 = np.zeros((n/2, 256, 256, 3)), np.zeros((n/2, 256, 256, 3))
     MS_valid_p = random.sample(MS_valid_p, n/2)
@@ -110,9 +110,9 @@ def read_gpx_valid_sample(n):
     print 'GPX_valid_p: %d \n' % len(GPX_valid_p)
     print 'GPX_valid_n: %d \n' % len(GPX_valid_n)
 
-    if len(GPX_valid_p) < n / 2 or len(GPX_valid_p) < n / 2:
+    if len(GPX_valid_p) < n / 2 or len(GPX_valid_n) < n / 2:
         print 'n is set too large; use all the samples for testing'
-        n = len(GPX_valid_p) * 2
+        n = len(GPX_valid_p) * 2 if len(GPX_valid_p) < len(GPX_valid_n) else len(GPX_valid_n) * 2
 
     img_X1, img_X0 = np.zeros((n / 2, 256, 256, 3)), np.zeros((n / 2, 256, 256, 3))
     GPX_valid_p = random.sample(GPX_valid_p, n / 2)
@@ -131,6 +131,35 @@ def read_gpx_valid_sample(n):
 
     return X, label
 
+def read_intersect_valid_sample(n): # osm&gpx intersection valid samples
+    client = sample_client.OSM_GPX_intClient()
+    valid_n = client.valid_negative()
+    valid_p = client.train_valid_positive()[1]
+
+    print 'valid_p: %d \n' % len(valid_p)
+    print 'valid_n: %d \n' % len(valid_n)
+
+    if len(valid_p) < n / 2 or len(valid_n) < n / 2:
+        print 'n is set too large; use all the samples for testing'
+        n = len(valid_p) * 2 if len(valid_p) < len(valid_n) else len(valid_n) * 2
+
+    img_X1, img_X0 = np.zeros((n / 2, 256, 256, 3)), np.zeros((n / 2, 256, 256, 3))
+    valid_p = random.sample(valid_p, n / 2)
+    for i, img in enumerate(valid_p):
+        img_X1[i] = misc.imread(os.path.join('../samples0/valid/MS_record/', img))
+
+    valid_n = random.sample(valid_n, n / 2)
+    for i, img in enumerate(valid_n):
+        img_X0[i] = misc.imread(os.path.join('../samples0/valid/MS_negative/', img))
+
+    X = np.concatenate((img_X1[0:n / 2], img_X0[0:n / 2]))
+
+    label = np.zeros((n, 2))
+    label[0:n / 2, 1] = 1
+    label[n / 2:n, 0] = 1
+
+    return X, label
+
 def read_gRoad_valid_sample(n):
     client = sample_client.gRoadclient()
     gRoad_valid_p = client.valid_positive()
@@ -139,9 +168,9 @@ def read_gRoad_valid_sample(n):
     print 'gRoad_valid_p: %d \n' % len(gRoad_valid_p)
     print 'gRoad_valid_n: %d \n' % len(gRoad_valid_n)
 
-    if len(gRoad_valid_p) < n / 2 or len(gRoad_valid_p) < n / 2:
+    if len(gRoad_valid_p) < n / 2 or len(gRoad_valid_n) < n / 2:
         print 'n is set too large; use all the samples for testing'
-        n = len(gRoad_valid_p) * 2
+        n = len(gRoad_valid_p) * 2 if len(gRoad_valid_p) < len(gRoad_valid_n) else len(gRoad_valid_n) * 2
 
     img_X1, img_X0 = np.zeros((n / 2, 256, 256, 3)), np.zeros((n / 2, 256, 256, 3))
     gRoad_valid_p = random.sample(gRoad_valid_p, n / 2)
