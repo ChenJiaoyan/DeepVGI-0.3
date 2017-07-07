@@ -28,7 +28,6 @@ all_xy = list(set(all_nodes))
 
 for i, node in enumerate(all_xy):
     row = [i, node]
-    print row
     writer.writerow(row)
 
 csvfile.close()
