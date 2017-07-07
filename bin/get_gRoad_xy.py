@@ -27,7 +27,10 @@ for feature in layer:
 all_xy = list(set(all_nodes))
 
 for i, node in enumerate(all_xy):
-    row = [i, node]
+    ind = node.index(',')
+    task_x = int(node[0:ind])
+    task_y = int(node[ind+1:])
+    row = [i, task_x, task_y]
     writer.writerow(row)
 
 csvfile.close()
