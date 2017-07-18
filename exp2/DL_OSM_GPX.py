@@ -16,7 +16,7 @@ import FileIO
 sample_dir = '../samples0/'
 
 def read_train_sample(n1, n0):
-    client = sample_client.OSM_GPXclient()
+    client = sample_client.OSM_GPX_intClient()
     train_p = client.train_valid_positive()[0]
     train_n = client.train_negative()
 
