@@ -3,7 +3,6 @@
 import os
 import sys
 import gc
-import DL_OSM
 import random
 import numpy as np
 from scipy import misc
@@ -12,6 +11,7 @@ sys.path.append("../lib")
 import NN_Model
 import sample_client
 import FileIO
+import Parameters
 
 sample_dir = '../samples0/'
 
@@ -52,7 +52,7 @@ def read_train_sample(n1, n0):
 
 if __name__ == '__main__':
 
-    evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, cv_i, te_n, nn = DL_OSM.deal_args(sys.argv[1:])
+    evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, te_n, nn = Parameters.deal_args(sys.argv[1:])
     print '--------------- Read Samples ---------------'
     img_X, Y = read_train_sample(tr_n1, tr_n0)
     m = NN_Model.Model(img_X, Y, nn + '_ZY')
