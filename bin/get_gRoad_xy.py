@@ -24,6 +24,8 @@ for feature in layer:
     task_x, task_y = get_nodes.cal_pixel(lat, lon)
     row = '%d, %d' % (task_x, task_y)
     all_nodes.append(row)
+
+# all_nodes is already a "list", ?
 all_xy = list(set(all_nodes))
 
 for i, node in enumerate(all_xy):
