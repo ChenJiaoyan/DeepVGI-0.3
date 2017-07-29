@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import os
+
 if not os.getcwd().endswith('exp3'):
     os.chdir('exp3')
 
@@ -16,6 +17,7 @@ import FileIO
 import Parameters
 
 sample_dir = '../samples0/'
+
 
 def read_train_sample_OSM(n1, n0):
     client = sample_client.OSMclient()
@@ -53,29 +55,25 @@ def read_train_sample_OSM(n1, n0):
 
 
 def active_sampling_GPX(m0, act_n, t_up, t_low, active_cache):
-    client = MapSwipe.MSClient()
-    MS_train_p = client.MS_train_positive()
+    client = sample_client.GPXclient()
+    GPX_train_p = client.GPX_train_positive()
     MS_train_n = client.MS_train_negative()
-    task_w = FileIO.osm_building_weight()
+    OSM_train_p = client.OSM_train_positive()
 
-    MS_diff_OSM_train_n = list(set(MS_train_n).difference(set(task_w.keys())))
-    if len(MS_diff_OSM_train_n) < act_n / 2:
-        print 'act_n/2 is larger than MS_train_n size '
-        print 'act_n is set to %d' % (len(MS_diff_OSM_train_n) * 2)
-        act_n = len(MS_diff_OSM_train_n) * 2
-    negative_img_X = np.zeros((act_n / 2, 256, 256, 3))
-    for i, img in enumerate(MS_diff_OSM_train_n[-act_n / 2:]):
-        negative_img_X[i] = misc.imread(os.path.join(sample_dir, 'train/MS_negative/', img))
-    label_n = np.zeros((act_n / 2, 2))
-    label_n[:, 0] = 1
+    GPX_diff_OSM_train_p = list(set(GPX_train_p).difference(OSM_train_p))
+    print 'GPX_diff_OSM_train_p: %d' % len(GPX_diff_OSM_train_p)
+    if act_n / 2 <= len(GPX_diff_OSM_train_p) < active_cache:
+        print 'active_cache is too large, set active_cache to %d' % len(GPX_diff_OSM_train_p)
+        active_cache = len(GPX_diff_OSM_train_p)
+    if len(GPX_diff_OSM_train_p) < act_n / 2:
+        print 'active_cache/active_size is too large, set active_cache and active_size/2 to %d' % len(
+            GPX_diff_OSM_train_p)
+        active_cache = len(GPX_diff_OSM_train_p)
+        act_n = len(GPX_diff_OSM_train_p) * 2
+    GPX_diff_OSM_train_p = random.sample(GPX_diff_OSM_train_p, active_cache)
 
-    MS_diff_OSM_train_p = list(set(MS_train_p).difference(set(task_w.keys())))
-    print 'MS_diff_OSM_train_p: %d' % len(MS_diff_OSM_train_p)
-    MS_diff_OSM_train_p = random.sample(MS_diff_OSM_train_p, active_cache)
-    print 'active_cache: %d' % active_cache
-
-    img_X = np.zeros((len(MS_diff_OSM_train_p), 256, 256, 3))
-    for i, img in enumerate(MS_diff_OSM_train_p):
+    img_X = np.zeros((len(GPX_diff_OSM_train_p), 256, 256, 3))
+    for i, img in enumerate(GPX_diff_OSM_train_p):
         img_X[i] = misc.imread(os.path.join(sample_dir, 'train/MS_record/', img))
 
     m0.set_prediction_input(img_X)
@@ -94,11 +92,18 @@ def active_sampling_GPX(m0, act_n, t_up, t_low, active_cache):
     label_p = np.zeros((act_n / 2, 2))
     label_p[:, 1] = 1
 
+    active_n = random.sample(MS_train_n, act_n / 2)
+    negative_img_X = np.zeros((act_n / 2, 256, 256, 3))
+    for i, img in enumerate(active_n):
+        negative_img_X[i] = misc.imread(os.path.join(sample_dir, 'train/MS_negative/', img))
+    label_n = np.zeros((act_n / 2, 2))
+    label_n[:, 0] = 1
+
     return np.concatenate((negative_img_X, positive_img_X)), np.concatenate((label_n, label_p))
 
 
 if __name__ == '__main__':
-    evaluate_only, external_test, tr_n1, tr_n0, tr_b, tr_e, tr_t, te_n, nn, act_n, t_up, t_low, a_c = \
+    evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, te_n, nn, act_n, t_up, t_low, a_c = \
         Parameters.deal_args_active(sys.argv[1:])
 
     print '--------------- Read Samples ---------------'
