@@ -1,7 +1,6 @@
 #! /usr/bin/python
 
-import os, sys
-import math
+import os
 import csv
 import urllib
 
