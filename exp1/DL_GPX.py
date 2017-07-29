@@ -54,7 +54,7 @@ def read_train_sample(n1, n0):
 
 
 if __name__ == '__main__':
-
+    print '%s' % sys.argv[0]
     evaluate_only, tr_n1, tr_n0, tr_b, tr_e, tr_t, te_n, nn = Parameters.deal_args(sys.argv[1:])
     print '--------------- Read Samples ---------------'
     img_X, Y = read_train_sample(tr_n1, tr_n0)
