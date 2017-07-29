@@ -1,6 +1,9 @@
 #! /usr/bin/python
 
 import os
+if not os.getcwd().endswith('exp1'):
+    os.chdir('exp1')
+
 import sys
 import gc
 import random

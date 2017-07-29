@@ -1,9 +1,11 @@
 #! /usr/bin/python
 
 import os
+if not os.getcwd().endswith('exp1'):
+    os.chdir('exp1')
+
 import sys
 import random
-import getopt
 import gc
 import numpy as np
 from scipy import misc
