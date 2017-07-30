@@ -81,7 +81,7 @@ def active_sampling_GPX(m0, act_n, t_up, t_low, active_cache):
 
     indexes = np.where((scores < t_up) & (scores > t_low))[0]
     if indexes.shape[0] < act_n / 2:
-        print 'act_n/2 is larger than uncertain samples'
+        print 'act_n/2 is larger than uncertain samples (%d)' % indexes.shape[0]
         print 'act_n is set to %d' % (indexes.shape[0] * 2)
         act_n = indexes.shape[0] * 2
     uncertain_img_X = img_X[indexes]
