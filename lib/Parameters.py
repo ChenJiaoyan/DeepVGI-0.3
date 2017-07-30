@@ -52,13 +52,15 @@ def deal_args_active(my_argv):
                                     'active_cache='])
     except getopt.GetoptError:
         print 'command -v -y <p_sample_size> -n <n_sample_size> -b <batch_size> -e <epoch_num> -t <thread_num>, ' \
-              '-z <test_size>, -m <network_model>, -a <active_size>, -u <threshold_up>, -l <threshold_low>, -c <active_cache>'
+              '-z <test_size>, -m <network_model>, -a <active_size>, -u <threshold_up>, -l <threshold_low>, ' \
+              '-c <active_cache> '
         print 'default settings: v=%s, n1=%d, n0=%d, b=%d, e=%d, t=%d, z=%d, m=%s, a=%d, u=%f, l=%f, c=%d' % (
             v, n1, n0, b, e, t, z, m, a, t_up, t_low, a_c)
     for opt, arg in opts:
         if opt == '-h':
             print 'command -v -y <p_sample_size> -n <n_sample_size> -b <batch_size> -e <epoch_num> -t <thread_num>, ' \
-                  '-z <test_size>, -m <network_model>, -a <active_size>, -u <threshold_up>, -l <threshold_low>, -c <active_cache>'
+                  '-z <test_size>, -m <network_model>, -a <active_size>, -u <threshold_up>, -l <threshold_low>, ' \
+                  '-c <active_cache> '
             sys.exit()
         elif opt == '-v':
             v = True
