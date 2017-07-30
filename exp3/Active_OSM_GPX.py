@@ -15,6 +15,7 @@ sys.path.append("../lib")
 import NN_Model
 import FileIO
 import Parameters
+import sample_client
 
 sample_dir = '../samples0/'
 
