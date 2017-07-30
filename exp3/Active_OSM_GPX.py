@@ -56,10 +56,12 @@ def read_train_sample_OSM(n1, n0):
 
 
 def active_sampling_GPX(m0, act_n, t_up, t_low, active_cache):
-    client = sample_client.GPXclient()
-    GPX_train_p = client.GPX_train_positive()
-    MS_train_n = client.MS_train_negative()
-    OSM_train_p = client.OSM_train_positive()
+    gpx_client = sample_client.GPXclient()
+    GPX_train_p = gpx_client.GPX_train_positive()
+    MS_train_n = gpx_client.MS_train_negative()
+
+    osm_client = sample_client.OSMclient()
+    OSM_train_p = osm_client.OSM_train_positive()
 
     GPX_diff_OSM_train_p = list(set(GPX_train_p).difference(OSM_train_p))
     print 'GPX_diff_OSM_train_p: %d' % len(GPX_diff_OSM_train_p)
