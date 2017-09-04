@@ -73,9 +73,10 @@ class Model(object):
         y_ = tf.placeholder(tf.float32, shape=[None, self.class_num])
 
         ## Conv1_1
-        W_conv1_1 = self.__weight_variable([3, 3, self.bands, 64])
+        W_conv1_1 = self.__weight_variable([7, 7, self.bands, 64])      # enlarge the filter size 3 to 7
         b_conv1_1 = self.__bias_variable([64])
-        h_conv1_1 = tf.nn.relu(self.__conv2d(x_image, W_conv1_1) + b_conv1_1)
+        h_conv1_1 = tf.nn.relu(tf.nn.conv2d(x_image, W_conv1_1, strides=[1, 4, 4, 1], padding='SAME') + b_conv1_1)
+        #h_conv1_1 = tf.nn.relu(self.__conv2d(x_image, W_conv1_1) + b_conv1_1)
 
         # Conv1_2
         W_conv1_2 = self.__weight_variable([3, 3, 64, 64])
