@@ -73,7 +73,7 @@ if __name__ == '__main__':
     gc.collect()
 
     print '--------------- Evaluation on Validation Samples ---------------'
-    img_X2, Y2 = FileIO.read_intersect_valid_sample(te_n) # experiment with osm, gpx, intersection and global roads samples
+    img_X2, Y2 = FileIO.read_gRoad_valid_sample(te_n) # experiment with osm, gpx, intersection and global roads samples
     m.set_evaluation_input(img_X2, Y2)
     m.evaluate()
     del img_X2, Y2
