@@ -127,13 +127,13 @@ class Model(object):
         b_conv4_2 = self.__bias_variable([512])
         h_conv4_2 = tf.nn.relu(self.__conv2d(h_conv4_1, W_conv4_2) + b_conv4_2)
 
-        # Conv4_3
-        W_conv4_3 = self.__weight_variable([3, 3, 512, 512])
-        b_conv4_3 = self.__bias_variable([512])
-        h_conv4_3 = tf.nn.relu(self.__conv2d(h_conv4_2, W_conv4_3) + b_conv4_3)
+        # # Conv4_3
+        # W_conv4_3 = self.__weight_variable([3, 3, 512, 512])
+        # b_conv4_3 = self.__bias_variable([512])
+        # h_conv4_3 = tf.nn.relu(self.__conv2d(h_conv4_2, W_conv4_3) + b_conv4_3)
 
         ## Pool4
-        h_pool4 = self.__max_pool_2x2(h_conv4_3)
+        h_pool4 = self.__max_pool_2x2(h_conv4_2)
 
         ## Conv5_1
         W_conv5_1 = self.__weight_variable([3, 3, 512, 512])
@@ -145,13 +145,13 @@ class Model(object):
         b_conv5_2 = self.__bias_variable([512])
         h_conv5_2 = tf.nn.relu(self.__conv2d(h_conv5_1, W_conv5_2) + b_conv5_2)
 
-        # Conv5_3
-        W_conv5_3 = self.__weight_variable([3, 3, 512, 512])
-        b_conv5_3 = self.__bias_variable([512])
-        h_conv5_3 = tf.nn.relu(self.__conv2d(h_conv5_2, W_conv5_3) + b_conv5_3)
+        # # Conv5_3
+        # W_conv5_3 = self.__weight_variable([3, 3, 512, 512])
+        # b_conv5_3 = self.__bias_variable([512])
+        # h_conv5_3 = tf.nn.relu(self.__conv2d(h_conv5_2, W_conv5_3) + b_conv5_3)
 
         ## Pool5
-        h_pool5 = self.__max_pool_2x2(h_conv5_3)
+        h_pool5 = self.__max_pool_2x2(h_conv5_2)
 
         ## FC 6
         shape_n = int(np.prod(h_pool5.get_shape()[1:]))
